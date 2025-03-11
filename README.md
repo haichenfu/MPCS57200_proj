@@ -1,7 +1,7 @@
 # MPCS57200_proj
 ## Overview
 This project build a Financial Document Helper, where user can upload financial news, companies' annual reports and so on and ask their questions. The helper will find the answers from the documents they uploaded and respond in the desired tone of the user. 
-![My Image](app_view.png)
+![My Image](app.png)
 ## Instruction
 ### Set up environment 
 Create an .env file in the same directory of app.py. In the .env file, include your OpenAI API Key as 
