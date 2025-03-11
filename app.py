@@ -3,7 +3,9 @@ import os
 import io
 import tempfile
 import openai
+import re
 from dotenv import load_dotenv
+import textwrap
 
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -61,6 +63,10 @@ tone = st.selectbox(
     ['Casual', 'Professional', "Concise", "Elaborated"],
     index = 0
 )
+
+def escape_markdown(text):
+    """Escape Markdown special characters in LLM output"""
+    return re.sub(r"([_*])", r"\\\1", text)
 
 if st.button("Get the Answer"):
     if uploaded_file is None:
@@ -131,10 +137,13 @@ if st.button("Get the Answer"):
             st.write("Here is the answer to your question: ")
 
             # further process the answer to the user
-            prompt = f"The question to answer is {question_input}, and the fact we get from the financial document is {result['Answer']}, generate a reply in {tone} tone to the user"
+            prompt = f"The question to answer is {question_input}, and the fact for the answer we get from the financial document is {result["Answer"]}, generate a reply in {tone} tone to the user in plain text format without any markdown simbols"
             sys_message = "you are a finance professional who help people understanding financial documents and answer their questions"
             response = call_chat_completion(sys_message, prompt)
-            st.write(response)
+
+            wrapped_text = textwrap.fill(response, width=80) 
+            st.code(wrapped_text, language="text")
+
 
             
 
